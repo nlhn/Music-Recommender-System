@@ -76,8 +76,10 @@ def change_password(id):
     return api_response(message="Password changed successfully", status_code=200)
 
 
-@bp.route("/", methods=["POST"])
+@bp.route("/register", methods=["POST"])
 def create_user():
+    print("Creating user")
+    print(request.json)
     email = request.json.get("email")
     if not email:
         return api_error("Email is required", status_code=400)
@@ -87,14 +89,12 @@ def create_user():
         return api_error("Password is required", status_code=400)
 
     instrument = request.json.get("instrument")
-    if not instrument or instrument not in [i[0] for i in instrument_choices()]:
-        return api_error("Instrument is required", status_code=400)
+    if instrument not in [i[0] for i in instrument_choices()]:
+        return api_error("Instrument is required or invalid", status_code=400)
 
     proficiency = request.json.get("proficiency")
-    if not proficiency or proficiency not in [
-        i[0] for i in instrument_proficiency_levels()
-    ]:
-        return api_error("Proficiency is required", status_code=400)
+    if proficiency not in [i[0] for i in instrument_proficiency_levels()]:
+        return api_error("Proficiency is required or invalid", status_code=400)
 
     User.create(
         email=email,
@@ -104,16 +104,20 @@ def create_user():
         proficiency=proficiency,
     )
 
+    print("User created")
+
     return api_response(message="User created", status_code=201)
 
 
 @bp.route("/<int:id>", methods=["GET"])
 @auth_required
 def get_user(id):
+    print("Getting user")
     user = User.get(User.id == id)
     if not user:
         return api_error("User not found", status_code=404)
 
+    print("User found")
     return api_response(
         data={
             "id": user.id,

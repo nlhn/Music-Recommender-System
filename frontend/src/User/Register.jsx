@@ -87,10 +87,7 @@ const Register = () => {
       const { confirmPassword, ...dataToSubmit } = userData;
 
       const result = await createUser(dataToSubmit).unwrap();
-      // Assuming the API returns a token or user data
-      localStorage.setItem("token", result.token);
-      localStorage.setItem("userId", result.userId);
-      navigate("/dashboard");
+      navigate("/login");
     } catch (err) {
       console.error("Registration failed:", err);
       setError(err.data?.message || "Failed to register. Please try again.");

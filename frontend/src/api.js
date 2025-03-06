@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const musicRecommenderApi = createApi({
   reducerPath: "musicRecommenderApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8000/api" }),
   tagTypes: ["Users", "Groups", "Campaigns", "Recommendations"],
   endpoints: (builder) => ({
     // User endpoints
@@ -15,7 +15,7 @@ export const musicRecommenderApi = createApi({
     }),
     createUser: builder.mutation({
       query: (userData) => ({
-        url: "/user",
+        url: "/user/register",
         method: "POST",
         body: userData,
       }),
